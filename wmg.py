@@ -128,6 +128,8 @@ def read_gps_data():
                #gps = "Latitude=" + str(lat) + "and Longitude=" + str(lon)
                #print(gps)
                speed = msg.spd_over_grnd
+               if speed = "None":
+                  speed = 0.0
                print ('Speed over ground = ' + str(speed))
                true_course = msg.true_course
                print ('True Course = ' + str(true_course))
