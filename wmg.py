@@ -18,8 +18,10 @@ i2c = busio.I2C(board.SCL, board.SDA)
 # Create the ADC object using the I2C bus
 ads = ADS.ADS1015(i2c)
 ads.gain = 2/3
+# Create single-ended input on channel 0
+chan = AnalogIn(ads, ADS.P3)
 # Create differential input between channel 0 and 1
-chan_diff = AnalogIn(ads, ADS.P0, ADS.P1)
+#chan = AnalogIn(ads, ADS.P0, ADS.P1)
 
 # initialize GPIO
 def init_GPIO():           # initialize GPIO
@@ -79,7 +81,7 @@ def get_value(length=4):
     #print("Measuring wind direction for %d seconds..." % length)
     start_time = time.time()
     while time.time() - start_time <= length:
-        wind_volt =round(chan_diff.voltage,2)
+        wind_volt =round(chan.voltage,2)
         if (wind_volt > 4.55 ): angle = 270;    # W
         elif (wind_volt > 4.30): angle = 315;   # NW
         elif (wind_volt > 4.00): angle = 292.5; # WNW
