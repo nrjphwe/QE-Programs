@@ -104,11 +104,11 @@ if __name__ == "__main__":
           print (get_value())
           angle = round(get_value(),1)
           print('angle ' + ' ' + str(angle))
-          try:
+          #try:
               #add_data(cursor, angle)
-          except mariadb.Error as e:
-              print(f"line 81 Error inserting to db: {e}")
-              sys.exit(1)
+          #except mariadb.Error as e:
+          #    print(f"line 81 Error inserting to db: {e}")
+          #    sys.exit(1)
 print(f"Last Inserted ID: {cursor.lastrowid}")
 cursor.close()
 conn.close()
