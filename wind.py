@@ -105,7 +105,7 @@ if __name__ == "__main__":
           angle = round(get_value(),1)
           print('angle ' + ' ' + str(angle))
           try:
-              add_data(cursor, angle)
+              #add_data(cursor, angle)
           except mariadb.Error as e:
               print(f"line 81 Error inserting to db: {e}")
               sys.exit(1)
