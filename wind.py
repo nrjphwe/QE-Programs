@@ -39,7 +39,7 @@ ads = ADS.ADS1015(i2c)
 ads.gain = 2/3
 
 # Create single-ended input on channel 0
-chan = AnalogIn(ads, ADS.P0)
+chan = AnalogIn(ads, ADS.P3)
 
 # Create differential input between channel 0 and 1
 #chan_diff = AnalogIn(ads, ADS.P0, ADS.P1)
