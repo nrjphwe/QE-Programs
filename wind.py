@@ -38,8 +38,11 @@ i2c = busio.I2C(board.SCL, board.SDA)
 ads = ADS.ADS1015(i2c)
 ads.gain = 2/3
 
+# Create single-ended input on channel 0
+chan = AnalogIn(ads, ADS.P0)
+
 # Create differential input between channel 0 and 1
-chan_diff = AnalogIn(ads, ADS.P0, ADS.P1)
+#chan_diff = AnalogIn(ads, ADS.P0, ADS.P1)
 
 # setup db
 dbconfig = read_db_config()
@@ -71,7 +74,7 @@ def get_value(length=5):
     print("Measuring wind direction for %d seconds..." % length)
     start_time = time.time()
     while time.time() - start_time <= length:
-        wind_volt =round(chan_diff.voltage,2)
+        wind_volt =round(chan.voltage,2)
         if (wind_volt > 4.55 ): angle = 270;    # W
         elif (wind_volt > 4.30): angle = 315;   # NW
         elif (wind_volt > 4.00): angle = 292.5; # WNW
