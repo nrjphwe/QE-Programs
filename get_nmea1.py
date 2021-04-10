@@ -42,9 +42,11 @@ def add_data(cursor, lat, lon, speed, true_course,wmg):
 def read_gps_data(lat, lon, speed, true_course):
    list_of_valid_statuses = ['A','V']
    with serial.Serial('/dev/ttyAMA0', baudrate=4800, timeout=1) as ser:
+   #with serial.Serial('/dev/ttyS0', baudrate=4800, timeout=1) as ser:
       # read 5 lines from the serial output
       for i in range(5):
          line = ser.readline().decode('ascii', errors='replace')
+         #print (str(line))
          decoded_line = line.strip()
          if decoded_line[0:6] == '$GPVTG':
             print ("VTG line")

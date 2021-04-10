@@ -39,7 +39,8 @@ ads = ADS.ADS1015(i2c)
 ads.gain = 2/3
 
 # Create differential input between channel 0 and 1
-chan_diff = AnalogIn(ads, ADS.P0, ADS.P1)
+chan_value = AnalogIn(ads, ADS.P3)
+#chan_diff = AnalogIn(ads, ADS.P0, ADS.P1)
 
 # setup db
 dbconfig = read_db_config()
@@ -71,7 +72,7 @@ def get_value(length=5):
     print("Measuring wind direction for %d seconds..." % length)
     start_time = time.time()
     while time.time() - start_time <= length:
-        wind_volt =round(chan_diff.voltage,2)
+        wind_volt =round(chan_value.voltage,2)
         if (wind_volt > 4.55 ): angle = 270;    # W
         elif (wind_volt > 4.30): angle = 315;   # NW
         elif (wind_volt > 4.00): angle = 292.5; # WNW
@@ -101,11 +102,11 @@ if __name__ == "__main__":
           print (get_value())
           angle = round(get_value(),1)
           print('angle ' + ' ' + str(angle))
-          try:
-              add_data(cursor, angle)
-          except mariadb.Error as e:
-              print(f"line 81 Error inserting to db: {e}")
-              sys.exit(1)
+          #try:
+          #    add_data(cursor, angle)
+          #except mariadb.Error as e:
+          #    print(f"line 81 Error inserting to db: {e}")
+          #    sys.exit(1)
 print(f"Last Inserted ID: {cursor.lastrowid}")
 cursor.close()
 conn.close()
