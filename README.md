@@ -14,8 +14,9 @@ The shut down uses GPIO4, which is Pin 7 and pin 9 (ground)
 - Pin 5 i2c SCL (GPIO3)
 - Pin 6 Ground, Ground used for shutdown (could maybe use 6 GND as well?)
 - Pin 7 GPIO4 used for shutdown
-- Pin 8 GPIO14 used for speed pulses
-
+- Pin 8 GPIO14 used for speed pulses and also UART0_TXD
+- Pin 9 GND
+- Pin 10 GPIO15 and UART0_RXD, for GPS NMEA0185 -> serial.Serial('/dev/ttyAMA0'
 
 To get into phpmyadmin: http://192.xxx.x.xxx/phpmyadmin/
 
