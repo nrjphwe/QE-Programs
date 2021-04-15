@@ -60,7 +60,7 @@ while True:
    amp = amps.voltage / 0.0025 * cable_loss
    ads.gain = 2/3
    volt = batt.voltage * 4
-   print("{:>6.4}\t{:>6.4}".format(volt,amp))
+   print("{:>6.4}\t{:g}".format(volt,amp))
    try:
      add_data(cursor,volt, amp)
    except mariadb.Error as e:
