@@ -6,6 +6,7 @@ import sys, time, math
 import board, busio
 import adafruit_ads1x15.ads1015 as ADS
 from adafruit_ads1x15.analog_in import AnalogIn
+sensor = 14 # GPIO port 14 for speed
 
 # startup numbers
 lat = 19.0
