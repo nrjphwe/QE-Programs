@@ -47,7 +47,7 @@ except mariadb.Error as e:
     print(f"line 29 Error connecting to MariaDB Platform:{e}")
     sys.exit(1)
 
-def add_data(cursor, wind_dir, lat, lon, speed, true_course, wmg):
+def add_data(cursor, wind_dir, lat, lon, speed, true_course, wmg,knots):
    try: # def Add data to Mariadb
       """Adds the given data to the tables"""
       sql_insert_query = (f'INSERT INTO wind (wind_dir, lat, lon, speed, true_course, wmg, knots) VALUES ({wind_dir:.1f},{lat:.11},{lon:.11},{speed:.2f},{true_course:.1f},{wmg:.2f},{nm_per_hour:.3f})')
