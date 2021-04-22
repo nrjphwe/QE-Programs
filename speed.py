@@ -83,7 +83,7 @@ def init_interrupt():
 def add_data(cursor, rpm, nm_per_hour, dist_meas):
    try: # def Add data to Mariadb
       """Adds the given data to the tables"""
-      sql_insert_query = (f'INSERT INTO wind (nmh) VALUES ({knots:.3f})')
+      sql_insert_query = (f'INSERT INTO wind (knots) VALUES ({nm_per_hour:.3f})')
       cursor.execute(sql_insert_query)
       conn.commit()
    except mariadb.Error as e:
