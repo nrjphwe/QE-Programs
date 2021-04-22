@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import serial, pynmea2, string 
 import RPi.GPIO as GPIO
+from datetime import *
 from time import sleep
 import sys, time, math
 import board, busio
