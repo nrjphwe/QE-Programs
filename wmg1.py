@@ -48,10 +48,10 @@ except mariadb.Error as e:
     print(f"line 29 Error connecting to MariaDB Platform:{e}")
     sys.exit(1)
 
-def add_data(cursor, wind_dir, lat, lon, speed, true_course, wmg,knots):
+def add_data(cursor, lat, lon, speed, true_course, wmg,knots):
    try: # def Add data to Mariadb
       """Adds the given data to the tables"""
-      sql_insert_query = (f'INSERT INTO wind (wind_dir, lat, lon, speed, true_course, wmg, knots) VALUES ({wind_dir:.1f},{lat:.11},{lon:.11},{speed:.2f},{true_course:.1f},{wmg:.2f},{nm_per_hour:.3f})')
+      sql_insert_query = (f'INSERT INTO wind (lat, lon, speed, true_course, wmg, knots) VALUES ({wind_dir:.1f},{lat:.11},{lon:.11},{speed:.2f},{true_course:.1f},{wmg:.2f},{nm_per_hour:.3f})')
       cursor.execute(sql_insert_query)
       conn.commit()
    except mariadb.Error as e:
@@ -111,59 +111,6 @@ def report(mode):
             print(datetime.now().ctime(),'dead calm or connection fault') #report rotor still stationary
         else:
             print('bad report mode')    
-      
-# calculate average wind direction
-def get_average(angles):
-    sin_sum = 0.0
-    cos_sum = 0.0
-    for angle in angles:
-        r = math.radians(angle)
-        sin_sum += math.sin(r)
-        cos_sum += math.cos(r)
-    flen = float(len(angles))
-    s = sin_sum / flen
-    c = cos_sum / flen
-    arc = math.degrees(math.atan(s / c))
-    average = 0.0
-    if s > 0 and c > 0:
-        average = arc
-    elif c < 0:
-        average = arc + 180
-    elif s < 0 and c > 0:
-        average = arc + 360
-    return 0.0 if average == 360 else average
-
-# Wind
-count = 0
-values = []
-def get_value(length=4):
-    data = []
-    #print("Measuring wind direction for %d seconds..." % length)
-    start_time = time.time()
-    while time.time() - start_time <= length:
-        wind_volt =round(chan.voltage,2)
-        if (wind_volt > 4.55 ): angle = 270;    # W
-        elif (wind_volt > 4.30): angle = 315;   # NW
-        elif (wind_volt > 4.00): angle = 292.5; # WNW
-        elif (wind_volt > 3.81): angle = 0;     # N
-        elif (wind_volt > 3.40): angle = 337.5; # NNW
-        elif (wind_volt > 3.02): angle = 225;   # SW
-        elif (wind_volt > 2.85): angle = 247.5; # WSW
-        elif (wind_volt > 2.20): angle = 45;    # NE
-        elif (wind_volt > 1.94): angle = 22.5;  # NNE
-        elif (wind_volt > 1.40): angle = 180;   # S
-        elif (wind_volt > 1.19): angle = 202.5; # SSW
-        elif (wind_volt > 0.95): angle = 135;   # SE
-        elif (wind_volt > 0.62): angle = 157.5; # SSE
-        elif (wind_volt > 0.52): angle = 90; # E
-        elif (wind_volt > 0.48): angle = 67.5; # ENE
-        elif (wind_volt > 0.38): angle = 112.5 # ESE
-        else: angle = 400; # Err
-        if not wind_volt in values: # keep only good measurements
-            print('unknown value ' + str(angle) + ' ' + str(wind_volt))
-            values.append(wind_volt)
-        data.append(angle)
-    return get_average(data)
 
 #def read_gps_data(lat, lon, speed, true_course):
 def read_gps_data():
@@ -185,10 +132,6 @@ def read_gps_data():
                lat = msg.latitude
                print (lat)
                lon = msg.longitude
-               #lat = ("%02d°%07.4f'" % (msg.latitude, msg.latitude_minutes))
-               #lon = ("%02d°%07.4f'" % (msg.longitude, msg.longitude_minutes))
-               #gps = "Latitude=" + str(lat) + "and Longitude=" + str(lon)
-               #print(gps)
                speed = msg.spd_over_grnd
                if speed == "None":
                   speed = 0.0
@@ -202,7 +145,6 @@ def read_gps_data():
 init_GPIO()
 init_interrupt()
 if __name__ == "__main__":
-#    obj = wind_direction(0, "wind_direction.json")
      while True:
           olddist_meas = dist_meas
           calculate_speed()
@@ -217,16 +159,15 @@ if __name__ == "__main__":
                   loopcount=secsnoread/sleeptime+1 #reset loopcount
                   report('error')
               sleep(sleeptime)
-          print('rpm:{0:.2f}-RPM, nmh:{1:.3f}-knots, dist_meas:{2:.2f}m pulse:{3} elapse:{4:.3f}-start_timer:{5:.3f}'.format(rpm,nm_per_hour,dist_meas,pulse, elapse, start_timer))
-          wind_dir = round(get_value(),1)
           read_gps_data()   
           speed = round(speed,2)
-          alpha = wind_dir - true_course
+          alpha = true_course
+          #alpha = wind_dir - true_course
           #wmg = abs((math.cos(alpha))*speed)
           wmg = abs((math.cos(alpha))*nm_per_hour)
           print(wmg)
           try:
-              add_data(cursor, wind_dir, lat, lon, speed, true_course, wmg, nm_per_hour)
+              add_data(cursor, lat, lon, speed, true_course, wmg, nm_per_hour)
           except mariadb.Error as e:
               print(f"line 81 Error inserting to db: {e}")
               sys.exit(1)
