@@ -14,6 +14,14 @@ sudo systemctl enable power_check.service
 sudo systemctl start power_check.service
 systemctl status power_check.service
 
+# We start the wind script on boot by using systemd file
+sudo cp -v QE-Programs/wind.service /lib/systemd/system
+sudo chmod u+x /lib/systemd/system/wind.service
+sudo systemctl daemon-reload
+sudo systemctl enable wind.service
+sudo systemctl start wind.service
+systemctl status wins.service
+
 echo "=> Installing power check php files at /var/www/html/...\n"
 sudo cp -v QE-Programs/w3.css /var/www/html
 sudo chmod -R 755 /var/www/html/
@@ -21,16 +29,14 @@ sudo chown -R www-data:www-data /var/www/html
 
 echo "=> setup SQL-Mariadb:...\n"
 sudo apt -y install mariadb-server mariadb-client
-echo "sudo mysql_secure_installation"
 sudo mysql_secure_installation
-
 echo " === Now some manual steps, copy the lines and paste into mysql                  ==="
-echo " === after sudo mysql -u root then                                               ==="
+echo " === after sudo mysql -u root >> then                                               ==="
 echo " === UPDATE mysql.user SET plugin = 'mysql_native_password' WHERE User = 'root'; ==="
 echo " === create user pi@localhost identified by "password";                          ==="
 echo " === grant all privileges on regattastart.* TO pi@localhost;                     ==="
 echo " === FLUSH PRIVILEGES;                                                           ==="
-echo " === now mysql -u root                                                           ==="
+echo " === now comes mysql -u root                                                           ==="
 sudo mysql -u root
 
 echo "now comes: sudo systemctl stop mariadb"
