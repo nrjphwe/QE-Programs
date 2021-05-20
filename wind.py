@@ -6,13 +6,24 @@ import board
 import busio
 import adafruit_ads1x15.ads1015 as ADS
 from adafruit_ads1x15.analog_in import AnalogIn
+
+# setup db
 import mariadb
 from python_mysql_dbconfig import read_db_config
+dbconfig = read_db_config()
+conn = None
+
+try:
+   print('connecting to Mysql DB..')
+   conn = mariadb.connect(**dbconfig)
+   cursor = conn.cursor()
+except mariadb.Error as e:
+   print(f"Error connecting to MariaDB Platform: {e}")
+   sys.exit(1)
 
 def get_average(angles):
     sin_sum = 0.0
     cos_sum = 0.0
-
     for angle in angles:
         r = math.radians(angle)
         sin_sum += math.sin(r)
@@ -22,7 +33,6 @@ def get_average(angles):
     c = cos_sum / flen
     arc = math.degrees(math.atan(s / c))
     average = 0.0
-
     if s > 0 and c > 0:
         average = arc
     elif c < 0:
@@ -33,25 +43,21 @@ def get_average(angles):
 
 # Create the I2C bus
 i2c = busio.I2C(board.SCL, board.SDA)
-
 # Create the ADC object using the I2C bus
 ads = ADS.ADS1015(i2c)
+# To boost small signals, the gain can be adjusted on the ADS1x15 chips in the following steps:
+# GAIN_TWOTHIRDS (for an input range of +/- 6.144V)
+# // ads1015.setGain(GAIN_TWOTHIRDS); // 2/3x gain +/- 6.144V 1 bit = 3mV (default)
+# // ads1015.setGain(GAIN_ONE);     // 1x gain   +/- 4.096V  1 bit = 2mV
+# // ads1015.setGain(GAIN_TWO);     // 2x gain   +/- 2.048V  1 bit = 1mV
+# // ads1015.setGain(GAIN_FOUR);    // 4x gain   +/- 1.024V  1 bit = 0.5mV
+# // ads1015.setGain(GAIN_EIGHT);   // 8x gain   +/- 0.512V  1 bit = 0.25mV
+# // ads1015.setGain(GAIN_SIXTEEN); // 16x gain  +/- 0.256V  1 bit = 0.125mV
 ads.gain = 2/3
 
 # Create differential input between channel 0 and 1
 chan_value = AnalogIn(ads, ADS.P3)
 #chan_diff = AnalogIn(ads, ADS.P0, ADS.P1)
-
-# setup db
-dbconfig = read_db_config()
-conn = None
-try:
-    print('connecting to Mysql DB..')
-    conn = mariadb.connect(**dbconfig)
-    cursor = conn.cursor()
-except mariadb.Error as e:
-    print(f"line 29 Error connecting to MariaDB Platform:{e}")
-    sys.exit(1)
 
 try:
    # def Add data
