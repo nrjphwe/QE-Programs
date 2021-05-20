@@ -2,8 +2,7 @@
 import RPi.GPIO as GPIO
 from time import sleep
 import sys, time, math
-import board
-import busio
+import board, busio
 import adafruit_ads1x15.ads1015 as ADS
 from adafruit_ads1x15.analog_in import AnalogIn
 
@@ -54,21 +53,18 @@ ads = ADS.ADS1015(i2c)
 # // ads1015.setGain(GAIN_EIGHT);   // 8x gain   +/- 0.512V  1 bit = 0.25mV
 # // ads1015.setGain(GAIN_SIXTEEN); // 16x gain  +/- 0.256V  1 bit = 0.125mV
 ads.gain = 2/3
-
-# Create differential input between channel 0 and 1
+# Create single-ended input on channel 3
 chan_value = AnalogIn(ads, ADS.P3)
-#chan_diff = AnalogIn(ads, ADS.P0, ADS.P1)
 
-try:
-   # def Add data
-   def add_data(cursor,angle):
+def add_data(cursor, wind_dir):
+   try: # def Add data
       """Adds the given data to the wind table"""
       sql_insert_query = (f'INSERT INTO wind (angle) VALUES ({angle:.1f})')
       cursor.execute(sql_insert_query)
       conn.commit()
-except mariadb.Error as e:
-   print(f"Error adding data to Maridb: {e}")
-   sys.exit(1)
+   except mariadb.Error as e:
+      print(f"Error adding data to Maridb: {e}")
+      sys.exit(1)
 
 # Wind
 count = 0
@@ -79,7 +75,7 @@ def get_value(length=5):
     start_time = time.time()
     while time.time() - start_time <= length:
         wind_volt =round(chan_value.voltage,2)
-        if (wind_volt > 4.55 ): angle = 270;    # W
+        if (wind_volt > 4.55 ): angle = 270;    # W 
         elif (wind_volt > 4.30): angle = 315;   # NW
         elif (wind_volt > 4.00): angle = 292.5; # WNW
         elif (wind_volt > 3.81): angle = 0;     # N
@@ -102,17 +98,17 @@ def get_value(length=5):
         data.append(angle)
     return get_average(data)
 
+# start
 if __name__ == "__main__":
 #    obj = wind_direction(0, "wind_direction.json")
      while True:
           print (get_value())
-          angle = round(get_value(),1)
-          print('angle ' + ' ' + str(angle))
-          #try:
-          #    add_data(cursor, angle)
-          #except mariadb.Error as e:
-          #    print(f"line 81 Error inserting to db: {e}")
-          #    sys.exit(1)
+          wind_dir = round(get_value(),1)
+          try:
+              add_data(cursor, win_dir)
+          except mariadb.Error as e:
+              print(f"line 81 Error inserting to db: {e}")
+              sys.exit(1)
 print(f"Last Inserted ID: {cursor.lastrowid}")
 cursor.close()
 conn.close()
