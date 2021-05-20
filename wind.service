@@ -1,0 +1,10 @@
+[Unit]
+Description=My wind service
+After=multi-user.target
+
+[Service]
+Type=idle
+ExecStart=/usr/bin/python3 -u /home/pi/QE-Programs/wind.py  2>&1 | /home/pi/QE-Programs/wind.log
+
+[Install]
+WantedBy=multi-user.target
