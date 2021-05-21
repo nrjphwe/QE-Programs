@@ -57,17 +57,17 @@ print("{:>6.4}\t{:>6.4}".format('volt','mA' ))
 while True:
    ads.gain = 16.0
    amp = amps.voltage / 0.0025 * cable_loss
-   time.sleep(0.5)
+   time.sleep(1.0)
    ads.gain = 2/3
    volt = batt.voltage * 4
-   time.sleep(0.5)
+   time.sleep(1.0)
    print("{:>6.4}\t{:g}".format(volt,amp))
    try:
      add_data(cursor,volt, amp)
    except mariadb.Error as e:
      print(f"Error inserting to db: {e}")
      sys.exit(1)
-   time.sleep(5.0)
+   time.sleep(4.0)
 print(f"Last Inserted ID: {cursor.lastrowid}")
 cursor.close()
 conn.close()
