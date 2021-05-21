@@ -20,7 +20,7 @@ sudo chmod u+x /lib/systemd/system/wind.service
 sudo systemctl daemon-reload
 sudo systemctl enable wind.service
 sudo systemctl start wind.service
-systemctl status wins.service
+systemctl status wind.service
 
 echo "=> Installing power check php files at /var/www/html/...\n"
 sudo cp -v QE-Programs/w3.css /var/www/html
