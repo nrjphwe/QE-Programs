@@ -106,7 +106,7 @@ if __name__ == "__main__":
           print (get_value())
           wind_dir = round(get_value(),1)
           try:
-              add_data(cursor, (wind_dir, , , , , , ))
+              add_data(cursor, (wind_dir), , , , , , )
           except mariadb.Error as e:
               print(f"line 81 Error inserting to db: {e}")
               sys.exit(1)
