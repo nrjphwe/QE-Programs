@@ -59,7 +59,7 @@ chan_value = AnalogIn(ads, ADS.P3)
 def add_data(cursor, wind_dir):
    try: # def Add data
       """Adds the given data to the wind table"""
-      sql_insert_query = (f'INSERT INTO wind (angle) VALUES ({angle:.1f})')
+      sql_insert_query = (f'INSERT INTO wind (wind_dir) VALUES ({wind_dir:.1f})')
       cursor.execute(sql_insert_query)
       conn.commit()
    except mariadb.Error as e:
