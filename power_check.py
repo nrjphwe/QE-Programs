@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
-import os
-import sys
+import os, sys
 import mariadb
 import datetime #new
 import time
-import board
-import busio
+import board, busio
 import adafruit_ads1x15.ads1015 as ADS
 from adafruit_ads1x15.analog_in import AnalogIn
 
@@ -42,6 +40,7 @@ ads = ADS.ADS1015(i2c)
 
 # Create differential input between channel 0 and 1
 amps = AnalogIn(ads, ADS.P0, ADS.P1)
+# Create input channel 2 
 batt = AnalogIn(ads, ADS.P2)
 
 #To boost small signals, the gain can be adjusted on the ADS1x15 chips in the following steps:
@@ -66,8 +65,7 @@ while True:
    except mariadb.Error as e:
      print(f"Error inserting to db: {e}")
      sys.exit(1)
-   time.sleep(10.0)
+   time.sleep(5.0)
 print(f"Last Inserted ID: {cursor.lastrowid}")
-time.sleep(5)
 cursor.close()
 conn.close()
