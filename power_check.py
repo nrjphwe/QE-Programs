@@ -55,7 +55,7 @@ cable_loss= 1000
 
 print("{:>6.4}\t{:>6.4}".format('volt','mA' ))
 while True:
-   ads.gain = 16.0
+   ads.gain = 8.0
    amp = amps.voltage / 0.0025 * cable_loss
    time.sleep(1.0)
    ads.gain = 2/3
