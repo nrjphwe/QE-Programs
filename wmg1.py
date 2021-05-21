@@ -51,7 +51,7 @@ except mariadb.Error as e:
 def add_data(cursor, lat, lon, speed, true_course, wmg,knots):
    try: # def Add data to Mariadb
       """Adds the given data to the tables"""
-      sql_insert_query = (f'INSERT INTO wind (lat, lon, speed, true_course, wmg, knots) VALUES ({wind_dir:.1f},{lat:.11},{lon:.11},{speed:.2f},{true_course:.1f},{wmg:.2f},{nm_per_hour:.3f})')
+      sql_insert_query = (f'INSERT INTO wind (lat, lon, speed, true_course, wmg, knots) VALUES ({lat:.11},{lon:.11},{speed:.2f},{true_course:.1f},{wmg:.2f},{nm_per_hour:.3f})')
       cursor.execute(sql_insert_query)
       conn.commit()
    except mariadb.Error as e:
