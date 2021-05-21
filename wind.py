@@ -104,7 +104,7 @@ if __name__ == "__main__":
 #    obj = wind_direction(0, "wind_direction.json")
      while True:
           print (get_value())
-          wind_dir = round(get_value(),1)
+          wind_dir = round(get_value(),0) -180
           try:
               add_data(cursor, wind_dir)
           except mariadb.Error as e:
