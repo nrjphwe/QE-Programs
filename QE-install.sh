@@ -22,6 +22,14 @@ sudo systemctl enable wind.service
 sudo systemctl start wind.service
 systemctl status wind.service
 
+# We start the wmg script on boot by using systemd file
+sudo cp -v QE-Programs/wmg.service /lib/systemd/system
+sudo chmod u+x /lib/systemd/system/wmg.service
+sudo systemctl daemon-reload
+sudo systemctl enable wmg.service
+sudo systemctl start wmg.service
+systemctl status wmg.service
+
 echo "=> Installing power check php files at /var/www/html/...\n"
 sudo cp -v QE-Programs/w3.css /var/www/html
 sudo chmod -R 755 /var/www/html/
