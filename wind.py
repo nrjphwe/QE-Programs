@@ -56,7 +56,7 @@ ads.gain = 2/3
 # Create single-ended input on channel 3
 chan_value = AnalogIn(ads, ADS.P3)
 
-def add_data(cursor, wind_dir, , , , , ,):
+def add_data(cursor, wind_dir, lat, lon, speed, true_course, wmg, knots):
    try: # def Add data
       """Adds the given data to the wind table"""
       sql_insert_query = (f'INSERT INTO wind (wind_dir, lat, lon, speed, true_course, wmg, knots) VALUES ({wind_dir:.1f},{lat:.11},{lon:.11},{speed:.2f},{true_course:.1f},{wmg:.2f},{nm_per_hour:.3f})')
